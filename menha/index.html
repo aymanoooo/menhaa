@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaha - Scholarship Assistance</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px 0;
+            background-color: var(--secondary);
+            flex-wrap: wrap;
+        }
+        nav a, .nav-button {
+            color: white;
+            text-decoration: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        nav a:hover, .nav-button:hover {
+            background-color: var(--accent);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .profile-progress {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .file-actions a {
+            margin-left: 10px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .forum-container {
+            display: flex;
+            gap: 20px;
+        }
+        .forum-topics {
+            flex: 1;
+        }
+        .forum-discussions {
+            flex: 2;
+        }
+        .discussion-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .discussion-meta {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .tab-container {
+            display: none;
+        }
+        .tab-container.active {
+            display: block;
+        }
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-nav button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-nav button.active {
+            border-bottom: 3px solid var(--primary);
+            font-weight: bold;
+        }
+        .auth-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .error-message {
+            color: var(--danger);
+            margin: 10px 0;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+        }
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        /* New Improvements */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-switcher button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .notification-error {
+            background-color: var(--danger);
+        }
+        .notification-warning {
+            background-color: orange;
+        }
+        .notification-success {
+            background-color: var(--success);
+        }
+        .fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        .rtl .form-group label {
+            float: right;
+        }
+        .rtl .file-actions a {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+        
+        /* Admin Styles */
+        .admin-panel {
+            background-color: #f8f9fa;
+            border-left: 3px solid var(--danger);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-only {
+            display: none;
+        }
+        
+        .admin-visible {
+            display: block;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .user-table th, .user-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .user-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: orange;
+            color: white;
+        }
+
+        /* Admin Password Modal */
+        #adminPasswordModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #adminPasswordModal .card {
+            width: 400px;
+            max-width: 90%;
+        }
+
+        #adminPasswordModal .form-group {
+            margin-bottom: 20px;
+        }
+        
+        /* New CV Builder Styles */
+        .education-entry, .experience-entry {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Notification Styles */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .notification-item {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .notification-item:hover {
+            transform: translateX(5px);
+        }
+        
+        /* University Finder Styles */
+        .university-card {
+            transition: transform 0.1s;
+        }
+        
+        .university-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .forum-container {
+                flex-direction: column;
+            }
+            .tab-nav {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <button onclick="changeLanguage('en')">English</button>
+        <button onclick="changeLanguage('ar')">العربية</button>
+    </div>
+    
+    <header>
+        <h1 data-i18n="welcome_header">Welcome to Monaha</h1>
+        <p data-i18n="welcome_subheader">Scholarship Assistance Platform</p>
+    </header>
+    
+    <nav>
+        <a href="#" onclick="showPage('home')" data-i18n="nav_home">Home</a>
+        <a href="#" id="dashboardLink" onclick="checkAuth('dashboard')" data-i18n="nav_dashboard">Dashboard</a>
+        <a href="#" id="scholarshipLink" onclick="checkAuth('scholarship')" data-i18n="nav_scholarship">Scholarship Navigator</a>
+        <a href="#" id="motivationLink" onclick="checkAuth('motivation')" data-i18n="nav_motivation">Motivation Letter</a>
+        <a href="#" id="documentsLink" onclick="checkAuth('documents')" data-i18n="nav_documents">Document Center</a>
+        <a href="#" id="communityLink" onclick="checkAuth('community')" data-i18n="nav_community">Community Forum</a>
+        <a href="#" id="cvLink" onclick="checkAuth('cv')" data-i18n="nav_cv">CV Builder</a>
+        <a href="#" id="applicationLink" onclick="checkAuth('application')" data-i18n="nav_application">My Applications</a>
+        <a href="#" id="universityLink" onclick="checkAuth('university')" data-i18n="nav_university">University Finder</a>
+        <a href="#" id="adminLink" onclick="checkAuth('admin')" data-i18n="nav_admin" style="display:none;">Admin</a>
+        <span id="authLinks">
+            <a href="#" onclick="showPage('login')" data-i18n="nav_login">Login</a>
+            <a href="#" onclick="showPage('register')" data-i18n="nav_register">Register</a>
+        </span>
+        <span id="userNav" style="display: none;">
+            <span id="usernameDisplay" class="user-greeting"></span>
+            <a href="#" class="nav-button" onclick="logout()" data-i18n="nav_logout">Logout</a>
+        </span>
+    </nav>
+    
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="card text-center">
+                <h2 data-i18n="home_title">Start Your Scholarship Journey</h2>
+                <div style="margin: 20px 0;">
+                    <a href="#" class="btn" onclick="showPage('register')" data-i18n="btn_register">Register</a>
+                    <a href="#" class="btn" onclick="showPage('login')" data-i18n="btn_login">Login</a>
+                </div>
+                <div class="grid">
+                    <div class="card">
+                        <h3 data-i18n="home_about">About Monaha</h3>
+                        <p data-i18n="home_about_desc">We help students find and apply for scholarships worldwide with personalized tools and guidance.</p>
+                        <a href="#" class="btn btn-accent" data-i18n="btn_learn_more">Learn More</a>
+                    </div>
+                    <div class="card">
+                        <h3 data-i18n="home_how_it_works">How It Works</h3>
+                        <p data-i18n="home_how_it_works_desc">Our platform simplifies the scholarship application process in four easy steps.</p>
+                        <a href="#" class="btn btn-accent" data-i18n="btn_see_steps">See Steps</a>
+                    </div>
+                    <div class="card">
+                        <h3 data-i18n="home_success">Success Stories</h3>
+                        <p data-i18n="home_success_desc">Read how other students secured funding using our platform.</p>
+                        <a href="#" class="btn btn-accent" data-i18n="btn_view_stories">View Stories</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Login Page -->
+        <div id="login" class="page">
+            <div class="card auth-form">
+                <h2 data-i18n="login_title">Login</h2>
+                <div id="loginError" class="error-message"></div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail" data-i18n="label_email">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword" data-i18n="label_password">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn" data-i18n="btn_login">Login</button>
+                    <button type="button" class="btn" onclick="showPage('home')" data-i18n="btn_back_home">Back to Home</button>
+                </form>
+                <p style="margin-top: 15px;" data-i18n="login_no_account">Don't have an account? <a href="#" onclick="showPage('register')" data-i18n="link_register">Register here</a></p>
+            </div>
+        </div>
+        
+        <!-- Register Page -->
+        <div id="register" class="page">
+            <div class="card auth-form">
+                <h2 data-i18n="register_title">Register</h2>
+                <div id="registerError" class="error-message"></div>
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName" data-i18n="label_full_name">Full Name</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail" data-i18n="label_email">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword" data-i18n="label_password">Password (min 8 characters)</label>
+                        <input type="password" id="registerPassword" minlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirm" data-i18n="label_confirm_password">Confirm Password</label>
+                        <input type="password" id="registerConfirm" required>
+                    </div>
+                    <button type="submit" class="btn" data-i18n="btn_register">Register</button>
+                    <button type="button" class="btn" onclick="showPage('home')" data-i18n="btn_back_home">Back to Home</button>
+                </form>
+                <p style="margin-top: 15px;" data-i18n="register_have_account">Already have an account? <a href="#" onclick="showPage('login')" data-i18n="link_login">Login here</a></p>
+            </div>
+        </div>
+        
+        <!-- Dashboard -->
+        <div id="dashboard" class="page">
+            <div class="card">
+                <h2 id="dashboardGreeting" data-i18n="dashboard_welcome">Welcome back!</h2>
+                <div class="profile-progress">
+                    <div class="progress-bar" id="profileProgress"></div>
+                </div>
+                <p id="progressText" data-i18n="profile_complete">Profile 0% complete</p>
+                
+                <div class="grid">
+                    <div class="card" onclick="showPage('profile')">
+                        <h3 data-i18n="dashboard_complete_profile">Complete Your Profile</h3>
+                        <p data-i18n="dashboard_complete_profile_desc">Finish setting up your account to get personalized recommendations.</p>
+                    </div>
+                    <div class="card" onclick="showPage('documents')">
+                        <h3 data-i18n="dashboard_upload_docs">Upload Documents</h3>
+                        <p data-i18n="dashboard_upload_docs_desc">Store all your application materials in one secure place.</p>
+                    </div>
+                    <div class="card" onclick="showPage('scholarship')">
+                        <h3 data-i18n="dashboard_scholarship">Scholarship Navigator</h3>
+                        <p data-i18n="dashboard_scholarship_desc">Find scholarships that match your profile and goals.</p>
+                    </div>
+                    <div class="card" onclick="showPage('motivation')">
+                        <h3 data-i18n="dashboard_motivation">Generate Motivation Letter</h3>
+                        <p data-i18n="dashboard_motivation_desc">Create a compelling letter tailored to each application.</p>
+                    </div>
+                    <div class="card" onclick="showPage('community')">
+                        <h3 data-i18n="dashboard_community">Community Support</h3>
+                        <p data-i18n="dashboard_community_desc">Get advice from other applicants and scholarship winners.</p>
+                    </div>
+                    <div class="card" onclick="showPage('cv')">
+                        <h3 data-i18n="dashboard_cv">CV Builder</h3>
+                        <p data-i18n="dashboard_cv_desc">Create a professional CV for your scholarship applications.</p>
+                    </div>
+                    <div class="card" onclick="showPage('application')">
+                        <h3 data-i18n="dashboard_application">My Applications</h3>
+                        <p data-i18n="dashboard_application_desc">Track all your scholarship applications in one place.</p>
+                    </div>
+                    <div class="card" onclick="showPage('university')">
+                        <h3 data-i18n="dashboard_university">University Finder</h3>
+                        <p data-i18n="dashboard_university_desc">Find universities that match your academic profile.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Complete Profile -->
+        <div id="profile" class="page">
+            <div class="card">
+                <h2 data-i18n="profile_title">Complete Your Profile</h2>
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <div class="tab-nav">
+                        <button type="button" class="active" onclick="openTab(event, 'personal')" data-i18n="tab_personal">Personal Info</button>
+                        <button type="button" onclick="openTab(event, 'education')" data-i18n="tab_education">Education</button>
+                        <button type="button" onclick="openTab(event, 'preferences')" data-i18n="tab_preferences">Preferences</button>
+                    </div>
+                    
+                    <div id="personal" class="tab-container active">
+                        <div class="form-group">
+                            <label for="fullName" data-i18n="label_full_name">Full Name</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob" data-i18n="label_dob">Date of Birth</label>
+                            <input type="date" id="dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality" data-i18n="label_nationality">Nationality</label>
+                            <input type="text" id="nationality" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact" data-i18n="label_contact">Contact Number</label>
+                            <input type="tel" id="contact" required>
+                        </div>
+                    </div>
+                    
+                    <div id="education" class="tab-container">
+                        <div class="form-group">
+                            <label for="currentEducation" data-i18n="label_education_level">Current Education Level</label>
+                            <select id="currentEducation" required>
+                                <option value="" data-i18n="option_select">Select</option>
+                                <option value="highschool" data-i18n="option_highschool">High School</option>
+                                <option value="bachelor" data-i18n="option_bachelor">Bachelor's Degree</option>
+                                <option value="master" data-i18n="option_master">Master's Degree</option>
+                                <option value="phd" data-i18n="option_phd">PhD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="institution" data-i18n="label_institution">Current Institution</label>
+                            <input type="text" id="institution" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gpa" data-i18n="label_gpa">GPA/Score</label>
+                            <input type="number" step="0.01" id="gpa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="field" data-i18n="label_field">Field of Study</label>
+                            <input type="text" id="field" required>
+                        </div>
+                    </div>
+                    
+                    <div id="preferences" class="tab-container">
+                        <div class="form-group">
+                            <label for="targetDegree" data-i18n="label_target_degree">Target Degree</label>
+                            <select id="targetDegree" required>
+                                <option value="" data-i18n="option_select">Select</option>
+                                <option value="bachelor" data-i18n="option_bachelor">Bachelor's</option>
+                                <option value="master" data-i18n="option_master">Master's</option>
+                                <option value="phd" data-i18n="option_phd">PhD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="countries" data-i18n="label_countries">Preferred Countries (select multiple)</label>
+                            <select id="countries" multiple style="height: 100px;">
+                                <option value="us" data-i18n="country_us">United States</option>
+                                <option value="uk" data-i18n="country_uk">United Kingdom</option>
+                                <option value="ca" data-i18n="country_ca">Canada</option>
+                                <option value="au" data-i18n="country_au">Australia</option>
+                                <option value="de" data-i18n="country_de">Germany</option>
+                                <option value="fr" data-i18n="country_fr">France</option>
+                                <option value="nl" data-i18n="country_nl">Netherlands</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_languages">Languages You Speak</label>
+                            <div>
+                                <input type="checkbox" id="english" name="languages" value="english">
+                                <label for="english" data-i18n="language_english">English</label>
+                                <input type="checkbox" id="french" name="languages" value="french">
+                                <label for="french" data-i18n="language_french">French</label>
+                                <input type="checkbox" id="german" name="languages" value="german">
+                                <label for="german" data-i18n="language_german">German</label>
+                                <input type="checkbox" id="spanish" name="languages" value="spanish">
+                                <label for="spanish" data-i18n="language_spanish">Spanish</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn" data-i18n="btn_save">Save Profile</button>
+                    <button type="button" class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Scholarship Navigator -->
+        <div id="scholarship" class="page">
+            <div class="card">
+                <h2 data-i18n="scholarship_title">Scholarship Navigator</h2>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h3 data-i18n="scholarship_filters">Filters</h3>
+                        <div class="form-group">
+                            <label for="filterCountry" data-i18n="label_country">Country</label>
+                            <select id="filterCountry" class="form-control">
+                                <option value="" data-i18n="option_any">Any Country</option>
+                                <option value="us" data-i18n="country_us">United States</option>
+                                <option value="uk" data-i18n="country_uk">United Kingdom</option>
+                                <option value="ca" data-i18n="country_ca">Canada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterDeadline" data-i18n="label_deadline">Deadline</label>
+                            <select id="filterDeadline" class="form-control">
+                                <option value="" data-i18n="option_any_time">Any Time</option>
+                                <option value="1month" data-i18n="option_1month">Within 1 Month</option>
+                                <option value="3months" data-i18n="option_3months">Within 3 Months</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterLanguage" data-i18n="label_language">Language</label>
+                            <select id="filterLanguage" class="form-control">
+                                <option value="" data-i18n="option_any_language">Any Language</option>
+                                <option value="english" data-i18n="language_english">English</option>
+                                <option value="french" data-i18n="language_french">French</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterProgram" data-i18n="label_program">Program Type</label>
+                            <select id="filterProgram" class="form-control">
+                                <option value="" data-i18n="option_any_program">Any Program</option>
+                                <option value="bachelor" data-i18n="option_bachelor">Bachelor's</option>
+                                <option value="master" data-i18n="option_master">Master's</option>
+                                <option value="phd" data-i18n="option_phd">PhD</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="filterScholarships()" data-i18n="btn_apply_filters">Apply Filters</button>
+                        <button class="btn" onclick="resetFilters()" data-i18n="btn_reset">Reset</button>
+                    </div>
+                    <div style="flex: 2;">
+                        <h3 data-i18n="scholarship_results">Results <span id="resultCount">(12)</span></h3>
+                        <div class="card">
+                            <h4 data-i18n="scholarship_international">International Excellence Scholarship</h4>
+                            <p><strong data-i18n="label_deadline">Deadline:</strong> July 10, 2023</p>
+                            <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_uk">United Kingdom</span></p>
+                            <p><strong data-i18n="label_program">Program:</strong> <span data-i18n="option_master">Master's Degree</span></p>
+                            <button class="btn" onclick="applyScholarship(1)" data-i18n="btn_apply_now">Apply Now</button>
+                        </div>
+                        <div class="card">
+                            <h4 data-i18n="scholarship_global">Global Leaders Fellowship</h4>
+                            <p><strong data-i18n="label_deadline">Deadline:</strong> August 1, 2023</p>
+                            <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_us">United States</span></p>
+                            <p><strong data-i18n="label_program">Program:</strong> <span data-i18n="option_phd">PhD</span></p>
+                            <button class="btn" onclick="applyScholarship(2)" data-i18n="btn_apply_now">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Motivation Letter Generator -->
+        <div id="motivation" class="page">
+            <div class="card">
+                <h2 data-i18n="motivation_title">Motivation Letter Generator</h2>
+                <div id="motivationSteps">
+                    <div class="form-group">
+                        <label data-i18n="motivation_step1">Step 1: Why do you want this scholarship?</label>
+                        <textarea id="reasonText" data-i18n="motivation_step1_placeholder" placeholder="Explain your motivation for applying..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="motivation_step2">Step 2: Describe your academic goals</label>
+                        <textarea id="goalsText" data-i18n="motivation_step2_placeholder" placeholder="What do you hope to achieve academically..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="motivation_step3">Step 3: Paste your academic experience</label>
+                        <textarea id="experienceText" data-i18n="motivation_step3_placeholder" placeholder="Your previous education, research, projects..."></textarea>
+                    </div>
+                    <button class="btn" onclick="generateLetter()" data-i18n="btn_generate">Generate Letter</button>
+                    <button class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+                    
+                    <div id="letterResult" style="margin-top: 20px; display: none;">
+                        <h3 data-i18n="motivation_result">Your Motivation Letter</h3>
+                        <div class="card" id="generatedLetter"></div>
+                        <button class="btn" onclick="downloadLetter('pdf')" data-i18n="btn_download_pdf">Download PDF</button>
+                        <button class="btn" onclick="downloadLetter('word')" data-i18n="btn_download_word">Download Word</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Document Center -->
+        <div id="documents" class="page">
+            <div class="card">
+                <h2 data-i18n="documents_title">Document Center <button class="btn" style="float: right;" onclick="showUploadModal()" data-i18n="btn_upload_new">Upload New</button></h2>
+                
+                <ul class="file-list">
+                    <li class="file-item">
+                        <span>Transcript.pdf</span>
+                        <span class="file-actions">
+                            <a href="#" data-i18n="link_edit">Edit</a>
+                            <a href="#" data-i18n="link_remove">Remove</a>
+                        </span>
+                    </li>
+                    <li class="file-item">
+                        <span>CV.docx</span>
+                        <span class="file-actions">
+                            <a href="#" data-i18n="link_edit">Edit</a>
+                            <a href="#" data-i18n="link_remove">Remove</a>
+                        </span>
+                    </li>
+                    <li class="file-item">
+                        <span>Personal_Photo.jpg</span>
+                        <span class="file-actions">
+                            <a href="#" data-i18n="link_edit">Edit</a>
+                            <a href="#" data-i18n="link_remove">Remove</a>
+                        </span>
+                    </li>
+                </ul>
+                
+                <div class="storage-meter">
+                    <p data-i18n="storage_usage">Storage: 12MB of 50MB used</p>
+                    <div style="height: 10px; background-color: #e9ecef; border-radius: 5px;">
+                        <div style="width: 24%; height: 100%; background-color: var(--primary);"></div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- Community Forum -->
+        <div id="community" class="page">
+            <div class="card">
+                <h2 data-i18n="community_title">Community Forum <button class="btn" style="float: right;" data-i18n="btn_new_post">New Post +</button></h2>
+                
+                <div class="forum-container">
+                    <div class="forum-topics">
+                        <h3 data-i18n="community_popular">Popular Topics</h3>
+                        <div class="card">
+                            <h4 data-i18n="community_tips">Application Tips</h4>
+                            <p data-i18n="community_tips_desc">Best practices for successful applications</p>
+                        </div>
+                        <div class="card">
+                            <h4 data-i18n="community_visa">Visa Advice</h4>
+                            <p data-i18n="community_visa_desc">Navigating visa requirements</p>
+                        </div>
+                        <div class="card">
+                            <h4 data-i18n="community_interview">Interview Prep</h4>
+                            <p data-i18n="community_interview_desc">How to ace your scholarship interview</p>
+                        </div>
+                    </div>
+                    
+                    <div class="forum-discussions">
+                        <h3 data-i18n="community_recent">Recent Discussions</h3>
+                        <div class="card discussion-item" onclick="showForumPost('1')">
+                            <h4 data-i18n="community_question1">How to improve my motivation letter?</h4>
+                            <p data-i18n="community_question1_desc">I'm applying for the XYZ scholarship and want to make my letter stand out...</p>
+                            <p class="discussion-meta" data-i18n="community_posted_by">Posted by user34 • 2 hours ago • 5 comments</p>
+                        </div>
+                        <div class="card discussion-item" onclick="showForumPost('2')">
+                            <h4 data-i18n="community_question2">Are there usually deadline extensions?</h4>
+                            <p data-i18n="community_question2_desc">I might need a few extra days to complete my application...</p>
+                            <p class="discussion-meta" data-i18n="community_posted_by">Posted by user89 • 5 hours ago • 2 comments</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- CV Builder -->
+        <div id="cv" class="page">
+            <div class="card">
+                <h2 data-i18n="cv_title">CV Builder</h2>
+                
+                <div class="tab-nav">
+                    <button type="button" class="active" onclick="openTab(event, 'cvPersonal')" data-i18n="tab_personal">Personal Info</button>
+                    <button type="button" onclick="openTab(event, 'cvEducation')" data-i18n="tab_education">Education</button>
+                    <button type="button" onclick="openTab(event, 'cvExperience')" data-i18n="tab_experience">Experience</button>
+                    <button type="button" onclick="openTab(event, 'cvSkills')" data-i18n="tab_skills">Skills</button>
+                </div>
+                
+                <form id="cvForm">
+                    <div id="cvPersonal" class="tab-container active">
+                        <div class="form-group">
+                            <label for="cvFullName" data-i18n="label_full_name">Full Name</label>
+                            <input type="text" id="cvFullName">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvProfession" data-i18n="label_profession">Profession</label>
+                            <input type="text" id="cvProfession">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvEmail" data-i18n="label_email">Email</label>
+                            <input type="email" id="cvEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvPhone" data-i18n="label_phone">Phone</label>
+                            <input type="tel" id="cvPhone">
+                        </div>
+                    </div>
+                    
+                    <div id="cvEducation" class="tab-container">
+                        <div id="educationEntries">
+                            <!-- Education entries will be added here -->
+                        </div>
+                        <button type="button" class="btn" onclick="addEducationEntry()" data-i18n="btn_add_education">Add Education</button>
+                    </div>
+                    
+                    <div id="cvExperience" class="tab-container">
+                        <div id="experienceEntries">
+                            <!-- Experience entries will be added here -->
+                        </div>
+                        <button type="button" class="btn" onclick="addExperienceEntry()" data-i18n="btn_add_experience">Add Experience</button>
+                    </div>
+                    
+                    <div id="cvSkills" class="tab-container">
+                        <div class="form-group">
+                            <label data-i18n="label_skills">Skills (comma separated)</label>
+                            <textarea id="cvSkillsList" placeholder="e.g., Leadership, Python, Research"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button type="button" class="btn" onclick="generateCV()" data-i18n="btn_generate_cv">Generate CV</button>
+                        <button type="button" class="btn" onclick="downloadCV('pdf')" data-i18n="btn_download_pdf">Download PDF</button>
+                        <button type="button" class="btn" onclick="downloadCV('word')" data-i18n="btn_download_word">Download Word</button>
+                        <button type="button" class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+                    </div>
+                </form>
+                
+                <div id="cvPreview" class="card" style="margin-top: 20px; display: none;">
+                    <h3 data-i18n="cv_preview">CV Preview</h3>
+                    <div id="cvPreviewContent"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Forum Post -->
+        <div id="forumpost" class="page">
+            <div class="card">
+                <h2 data-i18n="forumpost_title">Forum Post</h2>
+                
+                <div class="card">
+                    <h3 id="postTitle">How to improve my motivation letter?</h3>
+                    <p id="postContent">I'm applying for the XYZ scholarship and want to make my letter stand out. Any tips on structure and content would be appreciated!</p>
+                    <p class="discussion-meta">Posted by user34 • 2 hours ago</p>
+                    
+                    <div id="postReplies">
+                        <div class="card" style="margin-top: 15px;">
+                            <p>Start with a strong opening that captures your unique story...</p>
+                            <p class="discussion-meta">Reply by scholarship_winner • 1 hour ago</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <textarea id="replyContent" class="form-control" placeholder="Write your reply..." style="height: 100px;"></textarea>
+                        <button class="btn" onclick="submitReply()" style="margin-top: 10px;" data-i18n="btn_submit_reply">Submit Reply</button>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('community')" style="margin-top: 20px;" data-i18n="btn_back_forum">Back to Forum</button>
+            </div>
+        </div>
+        
+        <!-- Notification Center -->
+        <div id="notification" class="page">
+            <div class="card">
+                <h2 data-i18n="notification_title">Notifications</h2>
+                
+                <div class="notification-list">
+                    <div class="card notification-item">
+                        <h4 data-i18n="notification_scholarship">New Scholarship Match</h4>
+                        <p>International Excellence Scholarship matches your profile</p>
+                        <p class="discussion-meta">2 hours ago</p>
+                    </div>
+                    
+                    <div class="card notification-item">
+                        <h4 data-i18n="notification_deadline">Deadline Reminder</h4>
+                        <p>Global Leaders Fellowship application due in 3 days</p>
+                        <p class="discussion-meta">1 day ago</p>
+                    </div>
+                    
+                    <div class="card notification-item">
+                        <h4 data-i18n="notification_community">New Forum Reply</h4>
+                        <p>User45 replied to your post about motivation letters</p>
+                        <p class="discussion-meta">2 days ago</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" style="margin-top: 20px;" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- Additional Letters -->
+        <div id="additionalletter" class="page">
+            <div class="card">
+                <h2 data-i18n="additionalletter_title">Additional Letters</h2>
+                
+                <div class="grid">
+                    <div class="card" onclick="showLetterType('recommendation')">
+                        <h3 data-i18n="letter_recommendation">Recommendation Letter</h3>
+                        <p data-i18n="letter_recommendation_desc">Request or upload recommendation letters</p>
+                    </div>
+                    
+                    <div class="card" onclick="showLetterType('reference')">
+                        <h3 data-i18n="letter_reference">Reference Letter</h3>
+                        <p data-i18n="letter_reference_desc">Generate reference letters for your applications</p>
+                    </div>
+                    
+                    <div class="card" onclick="showLetterType('cover')">
+                        <h3 data-i18n="letter_cover">Cover Letter</h3>
+                        <p data-i18n="letter_cover_desc">Create customized cover letters</p>
+                    </div>
+                </div>
+                
+                <div id="letterTypeContainer" style="display: none; margin-top: 20px;">
+                    <!-- Dynamic content based on letter type -->
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" style="margin-top: 20px;" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- My Applications -->
+        <div id="application" class="page">
+            <div class="card">
+                <h2 data-i18n="application_title">My Applications</h2>
+                
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="table_scholarship">Scholarship</th>
+                            <th data-i18n="table_status">Status</th>
+                            <th data-i18n="table_date">Date Applied</th>
+                            <th data-i18n="table_actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicationTableBody">
+                        <tr>
+                            <td>International Excellence Scholarship</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td>2023-06-15</td>
+                            <td>
+                                <button class="btn" onclick="viewApplication('1')" data-i18n="btn_view">View</button>
+                                <button class="btn" onclick="withdrawApplication('1')" data-i18n="btn_withdraw">Withdraw</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <button class="btn" onclick="showPage('dashboard')" style="margin-top: 20px;" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- University Finder -->
+        <div id="university" class="page">
+            <div class="card">
+                <h2 data-i18n="university_title">University Finder</h2>
+                
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h3 data-i18n="university_filters">Filters</h3>
+                        <div class="form-group">
+                            <label for="universityCountry" data-i18n="label_country">Country</label>
+                            <select id="universityCountry" class="form-control">
+                                <option value="" data-i18n="option_any">Any Country</option>
+                                <option value="us" data-i18n="country_us">United States</option>
+                                <option value="uk" data-i18n="country_uk">United Kingdom</option>
+                                <option value="ca" data-i18n="country_ca">Canada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="universityRanking" data-i18n="label_ranking">World Ranking</label>
+                            <select id="universityRanking" class="form-control">
+                                <option value="" data-i18n="option_any">Any Ranking</option>
+                                <option value="top100">Top 100</option>
+                                <option value="top200">Top 200</option>
+                                <option value="top500">Top 500</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="universityProgram" data-i18n="label_program">Program Offered</label>
+                            <select id="universityProgram" class="form-control">
+                                <option value="" data-i18n="option_any">Any Program</option>
+                                <option value="bachelor" data-i18n="option_bachelor">Bachelor's</option>
+                                <option value="master" data-i18n="option_master">Master's</option>
+                                <option value="phd" data-i18n="option_phd">PhD</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="filterUniversities()" data-i18n="btn_apply_filters">Apply Filters</button>
+                    </div>
+                    
+                    <div style="flex: 2;">
+                        <h3 data-i18n="university_results">Results</h3>
+                        <div class="card university-card">
+                            <h4>Harvard University</h4>
+                            <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_us">United States</span></p>
+                            <p><strong>Ranking:</strong> #1</p>
+                            <p><strong>Programs:</strong> Bachelor, Master, PhD</p>
+                            <button class="btn" onclick="viewUniversityDetails('harvard')" data-i18n="btn_view_details">View Details</button>
+                        </div>
+                        <div class="card university-card">
+                            <h4>University of Oxford</h4>
+                            <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_uk">United Kingdom</span></p>
+                            <p><strong>Ranking:</strong> #2</p>
+                            <p><strong>Programs:</strong> Bachelor, Master, PhD</p>
+                            <button class="btn" onclick="viewUniversityDetails('oxford')" data-i18n="btn_view_details">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" style="margin-top: 20px;" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- Admin Dashboard -->
+        <div id="admin" class="page">
+            <div class="card">
+                <h2 data-i18n="admin_title">Admin Dashboard</h2>
+                
+                <div class="admin-panel">
+                    <h3 data-i18n="admin_scholarship_management">Scholarship Management</h3>
+                    <button class="btn" onclick="showAddScholarshipModal()" data-i18n="btn_add_scholarship">Add New Scholarship</button>
+                    <div id="scholarshipList" class="grid" style="margin-top: 20px;">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+                
+                <div class="admin-panel">
+                    <h3 data-i18n="admin_user_management">User Management</h3>
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="table_name">Name</th>
+                                <th data-i18n="table_email">Email</th>
+                                <th data-i18n="table_joined">Joined</th>
+                                <th data-i18n="table_status">Status</th>
+                                <th data-i18n="table_actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="admin-panel">
+                    <h3 data-i18n="admin_system_stats">System Statistics</h3>
+                    <div class="grid">
+                        <div class="card">
+                            <h4 data-i18n="stat_total_users">Total Users</h4>
+                            <p id="statUsers">0</p>
+                        </div>
+                        <div class="card">
+                            <h4 data-i18n="stat_active_scholarships">Active Scholarships</h4>
+                            <p id="statScholarships">0</p>
+                        </div>
+                        <div class="card">
+                            <h4 data-i18n="stat_applications">Applications This Month</h4>
+                            <p id="statApplications">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="showPage('dashboard')" data-i18n="btn_back_dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upload Modal -->
+    <div id="uploadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="card" style="width: 500px; max-width: 90%;">
+            <h2 data-i18n="upload_title">Upload New Document</h2>
+            <div class="form-group">
+                <label for="documentType" data-i18n="label_document_type">Document Type</label>
+                <select id="documentType" class="form-control">
+                    <option value="transcript" data-i18n="option_transcript">Transcript</option>
+                    <option value="cv" data-i18n="option_cv">CV/Resume</option>
+                    <option value="photo" data-i18n="option_photo">Photo</option>
+                    <option value="recommendation" data-i18n="option_recommendation">Recommendation Letter</option>
+                    <option value="other" data-i18n="option_other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fileUpload" data-i18n="label_select_file">Select File</label>
+                <input type="file" id="fileUpload" class="form-control">
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <button class="btn" onclick="hideUploadModal()" data-i18n="btn_cancel">Cancel</button>
+                <button class="btn btn-accent" onclick="uploadDocument()" data-i18n="btn_upload">Upload</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Scholarship Modal -->
+    <div id="addScholarshipModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="card" style="width: 600px; max-width: 90%;">
+            <h2 data-i18n="scholarship_add_title">Add New Scholarship</h2>
+            <form id="addScholarshipForm">
+                <div class="form-group">
+                    <label for="scholarshipName" data-i18n="label_name">Name</label>
+                    <input type="text" id="scholarshipName" required>
+                </div>
+                <div class="form-group">
+                    <label for="scholarshipDescription" data-i18n="label_description">Description</label>
+                    <textarea id="scholarshipDescription" required></textarea>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="scholarshipDeadline" data-i18n="label_deadline">Deadline</label>
+                        <input type="date" id="scholarshipDeadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="scholarshipCountry" data-i18n="label_country">Country</label>
+                        <select id="scholarshipCountry" required>
+                            <option value="" data-i18n="option_select">Select</option>
+                            <option value="us" data-i18n="country_us">United States</option>
+                            <option value="uk" data-i18n="country_uk">United Kingdom</option>
+                            <option value="ca" data-i18n="country_ca">Canada</option>
+                            <option value="au" data-i18n="country_au">Australia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="scholarshipProgram" data-i18n="label_program">Program Type</label>
+                        <select id="scholarshipProgram" required>
+                            <option value="" data-i18n="option_select">Select</option>
+                            <option value="bachelor" data-i18n="option_bachelor">Bachelor's</option>
+                            <option value="master" data-i18n="option_master">Master's</option>
+                            <option value="phd" data-i18n="option_phd">PhD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="scholarshipFunding" data-i18n="label_funding">Funding Type</label>
+                        <select id="scholarshipFunding" required>
+                            <option value="" data-i18n="option_select">Select</option>
+                            <option value="full" data-i18n="funding_full">Full Funding</option>
+                            <option value="partial" data-i18n="funding_partial">Partial Funding</option>
+                            <option value="tuition" data-i18n="funding_tuition">Tuition Waiver</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="scholarshipLink" data-i18n="label_apply_link">Application Link</label>
+                    <input type="url" id="scholarshipLink" required>
+                </div>
+                <div class="form-group">
+                    <label for="scholarshipRequirements" data-i18n="label_requirements">Requirements</label>
+                    <textarea id="scholarshipRequirements"></textarea>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button type="button" class="btn" onclick="hideAddScholarshipModal()" data-i18n="btn_cancel">Cancel</button>
+                    <button type="submit" class="btn btn-accent" data-i18n="btn_save">Save Scholarship</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Password Modal -->
+    <div id="adminPasswordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="card">
+            <h2 data-i18n="admin_password_title">Admin Authentication Required</h2>
+            <div id="adminPasswordError" class="error-message"></div>
+            <div class="form-group">
+                <label for="adminPassword" data-i18n="label_admin_password">Admin Password</label>
+                <input type="password" id="adminPassword" required>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <button class="btn" onclick="hideAdminPasswordModal()" data-i18n="btn_cancel">Cancel</button>
+                <button class="btn btn-accent" onclick="verifyAdminPassword()" data-i18n="btn_submit">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // User authentication system
+        const usersKey = 'monaha_users';
+        const currentUserKey = 'monaha_current_user';
+        const scholarshipsKey = 'monaha_scholarships';
+        const applicationsKey = 'monaha_applications';
+        const adminPasswordKey = 'monaha_admin_password';
+        const cvKey = 'monaha_cv_data';
+        const forumPostsKey = 'monaha_forum_posts';
+        const universitiesKey = 'monaha_universities';
+        
+        // Initialize users in localStorage if not exists
+        if (!localStorage.getItem(usersKey)) {
+            // Create default admin user
+            const defaultAdmin = {
+                id: "1",
+                name: "Admin User",
+                email: "admin@monaha.edu",
+                password: "admin123", // For testing only
+                joined: new Date().toISOString(),
+                role: "admin",
+                status: "active",
+                profile: {
+                    personal: {
+                        fullName: "Admin User",
+                        dob: "1980-01-01",
+                        nationality: "International",
+                        contact: "+1234567890"
+                    },
+                    education: {
+                        currentEducation: "phd",
+                        institution: "Monaha University",
+                        gpa: "4.0",
+                        field: "Computer Science"
+                    },
+                    preferences: {
+                        targetDegree: "phd",
+                        countries: ["us", "uk"],
+                        languages: ["english"]
+                    }
+                },
+                profileCompletion: 100
+            };
+            
+            // Create test user "ali"
+            const testUser = {
+                id: "2",
+                name: "Ali",
+                email: "ali@example.com",
+                password: "12345", // For testing only
+                joined: new Date().toISOString(),
+                role: "student",
+                status: "active"
+            };
+            
+            localStorage.setItem(usersKey, JSON.stringify([defaultAdmin, testUser]));
+        }
+
+        // Initialize admin password if not exists
+        if (!localStorage.getItem(adminPasswordKey)) {
+            // Default admin password is "admin123"
+            localStorage.setItem(adminPasswordKey, "admin123");
+        }
+        
+        // Initialize scholarships if not exists
+        if (!localStorage.getItem(scholarshipsKey)) {
+            const defaultScholarships = [
+                {
+                    id: "1",
+                    name: "International Excellence Scholarship",
+                    description: "For outstanding international students pursuing graduate studies",
+                    deadline: "2023-07-10",
+                    country: "uk",
+                    program: "master",
+                    funding: "full",
+                    link: "https://example.com/apply/1",
+                    requirements: "Minimum GPA 3.5, research proposal, 2 recommendation letters",
+                    status: "active",
+                    createdBy: "1",
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: "2",
+                    name: "Global Leaders Fellowship",
+                    description: "For PhD candidates demonstrating leadership potential",
+                    deadline: "2023-08-01",
+                    country: "us",
+                    program: "phd",
+                    funding: "full",
+                    link: "https://example.com/apply/2",
+                    requirements: "Minimum GPA 3.7, statement of purpose, 3 recommendation letters",
+                    status: "active",
+                    createdBy: "1",
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            localStorage.setItem(scholarshipsKey, JSON.stringify(defaultScholarships));
+        }
+        
+        // Initialize applications if not exists
+        if (!localStorage.getItem(applicationsKey)) {
+            localStorage.setItem(applicationsKey, JSON.stringify([]));
+        }
+        
+        // Initialize CV data if not exists
+        if (!localStorage.getItem(cvKey)) {
+            localStorage.setItem(cvKey, JSON.stringify({}));
+        }
+        
+        // Initialize forum posts if not exists
+        if (!localStorage.getItem(forumPostsKey)) {
+            const defaultPosts = [
+                {
+                    id: "1",
+                    title: "How to improve my motivation letter?",
+                    content: "I'm applying for the XYZ scholarship and want to make my letter stand out. Any tips on structure and content would be appreciated!",
+                    author: "user34",
+                    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    replies: [
+                        {
+                            id: "1",
+                            content: "Start with a strong opening that captures your unique story...",
+                            author: "scholarship_winner",
+                            createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+                        }
+                    ]
+                },
+                {
+                    id: "2",
+                    title: "Are there usually deadline extensions?",
+                    content: "I might need a few extra days to complete my application...",
+                    author: "user89",
+                    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                    replies: []
+                }
+            ];
+            localStorage.setItem(forumPostsKey, JSON.stringify(defaultPosts));
+        }
+        
+        // Initialize universities if not exists
+        if (!localStorage.getItem(universitiesKey)) {
+            const defaultUniversities = [
+                {
+                    id: "harvard",
+                    name: "Harvard University",
+                    country: "us",
+                    ranking: 1,
+                    programs: ["bachelor", "master", "phd"],
+                    description: "One of the world's most prestigious universities"
+                },
+                {
+                    id: "oxford",
+                    name: "University of Oxford",
+                    country: "uk",
+                    ranking: 2,
+                    programs: ["bachelor", "master", "phd"],
+                    description: "The oldest university in the English-speaking world"
+                }
+            ];
+            localStorage.setItem(universitiesKey, JSON.stringify(defaultUniversities));
+        }
+        
+        // Language translations
+        const translations = {
+            en: {
+                welcome_header: "Welcome to Monaha",
+                welcome_subheader: "Scholarship Assistance Platform",
+                nav_home: "Home",
+                nav_dashboard: "Dashboard",
+                nav_scholarship: "Scholarship Navigator",
+                nav_motivation: "Motivation Letter",
+                nav_documents: "Document Center",
+                nav_community: "Community Forum",
+                nav_cv: "CV Builder",
+                nav_application: "My Applications",
+                nav_university: "University Finder",
+                nav_admin: "Admin",
+                nav_login: "Login",
+                nav_register: "Register",
+                nav_logout: "Logout",
+                home_title: "Start Your Scholarship Journey",
+                home_about: "About Monaha",
+                home_about_desc: "We help students find and apply for scholarships worldwide with personalized tools and guidance.",
+                home_how_it_works: "How It Works",
+                home_how_it_works_desc: "Our platform simplifies the scholarship application process in four easy steps.",
+                home_success: "Success Stories",
+                home_success_desc: "Read how other students secured funding using our platform.",
+                btn_learn_more: "Learn More",
+                btn_see_steps: "See Steps",
+                btn_view_stories: "View Stories",
+                btn_register: "Register",
+                btn_login: "Login",
+                login_title: "Login",
+                label_email: "Email",
+                label_password: "Password",
+                btn_back_home: "Back to Home",
+                login_no_account: "Don't have an account?",
+                link_register: "Register here",
+                register_title: "Register",
+                label_full_name: "Full Name",
+                label_confirm_password: "Confirm Password",
+                register_have_account: "Already have an account?",
+                link_login: "Login here",
+                dashboard_welcome: "Welcome back!",
+                profile_complete: "Profile 0% complete",
+                dashboard_complete_profile: "Complete Your Profile",
+                dashboard_complete_profile_desc: "Finish setting up your account to get personalized recommendations.",
+                dashboard_upload_docs: "Upload Documents",
+                dashboard_upload_docs_desc: "Store all your application materials in one secure place.",
+                dashboard_scholarship: "Scholarship Navigator",
+                dashboard_scholarship_desc: "Find scholarships that match your profile and goals.",
+                dashboard_motivation: "Generate Motivation Letter",
+                dashboard_motivation_desc: "Create a compelling letter tailored to each application.",
+                dashboard_community: "Community Support",
+                dashboard_community_desc: "Get advice from other applicants and scholarship winners.",
+                dashboard_cv: "CV Builder",
+                dashboard_cv_desc: "Create a professional CV for your scholarship applications.",
+                dashboard_application: "My Applications",
+                dashboard_application_desc: "Track all your scholarship applications in one place.",
+                dashboard_university: "University Finder",
+                dashboard_university_desc: "Find universities that match your academic profile.",
+                dashboard_notifications: "Notifications",
+                dashboard_new_scholarships: "3 new scholarships match your criteria",
+                dashboard_deadline_reminder: "Deadline reminder: XYZ Scholarship (July 10)",
+                profile_title: "Complete Your Profile",
+                tab_personal: "Personal Info",
+                tab_education: "Education",
+                tab_preferences: "Preferences",
+                label_dob: "Date of Birth",
+                label_nationality: "Nationality",
+                label_contact: "Contact Number",
+                label_education_level: "Current Education Level",
+                option_select: "Select",
+                option_highschool: "High School",
+                option_bachelor: "Bachelor's Degree",
+                option_master: "Master's Degree",
+                option_phd: "PhD",
+                label_institution: "Current Institution",
+                label_gpa: "GPA/Score",
+                label_field: "Field of Study",
+                label_target_degree: "Target Degree",
+                label_countries: "Preferred Countries (select multiple)",
+                label_languages: "Languages You Speak",
+                language_english: "English",
+                language_french: "French",
+                language_german: "German",
+                language_spanish: "Spanish",
+                btn_save: "Save",
+                btn_back_dashboard: "Back to Dashboard",
+                scholarship_title: "Scholarship Navigator",
+                scholarship_filters: "Filters",
+                label_country: "Country",
+                option_any: "Any Country",
+                country_us: "United States",
+                country_uk: "United Kingdom",
+                country_ca: "Canada",
+                country_au: "Australia",
+                country_de: "Germany",
+                country_fr: "France",
+                country_nl: "Netherlands",
+                label_deadline: "Deadline",
+                option_any_time: "Any Time",
+                option_1month: "Within 1 Month",
+                option_3months: "Within 3 Months",
+                label_language: "Language",
+                option_any_language: "Any Language",
+                label_program: "Program Type",
+                option_any_program: "Any Program",
+                btn_apply_filters: "Apply Filters",
+                btn_reset: "Reset",
+                scholarship_results: "Results",
+                scholarship_international: "International Excellence Scholarship",
+                scholarship_global: "Global Leaders Fellowship",
+                btn_apply_now: "Apply Now",
+                btn_view_details: "View Details",
+                label_funding: "Funding",
+                funding_full: "Full Funding",
+                funding_partial: "Partial Funding",
+                funding_tuition: "Tuition Waiver",
+                motivation_title: "Motivation Letter Generator",
+                motivation_step1: "Step 1: Why do you want this scholarship?",
+                motivation_step1_placeholder: "Explain your motivation for applying...",
+                motivation_step2: "Step 2: Describe your academic goals",
+                motivation_step2_placeholder: "What do you hope to achieve academically...",
+                motivation_step3: "Step 3: Paste your academic experience",
+                motivation_step3_placeholder: "Your previous education, research, projects...",
+                btn_generate: "Generate",
+                motivation_result: "Your Motivation Letter",
+                btn_download_pdf: "Download PDF",
+                btn_download_word: "Download Word",
+                documents_title: "Document Center",
+                btn_upload_new: "Upload New",
+                link_edit: "Edit",
+                link_remove: "Remove",
+                link_download: "Download",
+                storage_usage: "Storage: 12MB of 50MB used",
+                upload_title: "Upload New Document",
+                label_document_type: "Document Type",
+                option_transcript: "Transcript",
+                option_cv: "CV/Resume",
+                option_photo: "Photo",
+                option_recommendation: "Recommendation Letter",
+                option_other: "Other",
+                label_select_file: "Select File",
+                btn_cancel: "Cancel",
+                btn_upload: "Upload",
+                community_title: "Community Forum",
+                btn_new_post: "New Post +",
+                community_popular: "Popular Topics",
+                community_tips: "Application Tips",
+                community_tips_desc: "Best practices for successful applications",
+                community_visa: "Visa Advice",
+                community_visa_desc: "Navigating visa requirements",
+                community_interview: "Interview Prep",
+                community_interview_desc: "How to ace your scholarship interview",
+                community_recent: "Recent Discussions",
+                community_question1: "How to improve my motivation letter?",
+                community_question1_desc: "I'm applying for the XYZ scholarship and want to make my letter stand out...",
+                community_question2: "Are there usually deadline extensions?",
+                community_question2_desc: "I might need a few extra days to complete my application...",
+                community_posted_by: "Posted by user34 • 2 hours ago • 5 comments",
+                forumpost_title: "Forum Post",
+                btn_submit_reply: "Submit Reply",
+                btn_back_forum: "Back to Forum",
+                cv_title: "CV Builder",
+                label_profession: "Profession",
+                label_phone: "Phone",
+                tab_experience: "Experience",
+                tab_skills: "Skills",
+                label_skills: "Skills",
+                btn_add_education: "Add Education",
+                btn_add_experience: "Add Experience",
+                btn_generate_cv: "Generate CV",
+                cv_preview: "CV Preview",
+                notification_title: "Notifications",
+                notification_scholarship: "New Scholarship Match",
+                notification_deadline: "Deadline Reminder",
+                notification_community: "New Forum Reply",
+                additionalletter_title: "Additional Letters",
+                letter_recommendation: "Recommendation Letter",
+                letter_recommendation_desc: "Request or upload recommendation letters",
+                letter_reference: "Reference Letter",
+                letter_reference_desc: "Generate reference letters for your applications",
+                letter_cover: "Cover Letter",
+                letter_cover_desc: "Create customized cover letters",
+                application_title: "My Applications",
+                table_scholarship: "Scholarship",
+                table_status: "Status",
+                table_date: "Date Applied",
+                table_actions: "Actions",
+                btn_view: "View",
+                btn_withdraw: "Withdraw",
+                university_title: "University Finder",
+                university_filters: "Filters",
+                university_results: "Results",
+                label_ranking: "World Ranking",
+                option_any: "Any",
+                admin_title: "Admin Dashboard",
+                admin_scholarship_management: "Scholarship Management",
+                admin_user_management: "User Management",
+                admin_system_stats: "System Statistics",
+                btn_add_scholarship: "Add New Scholarship",
+                table_name: "Name",
+                table_email: "Email",
+                table_joined: "Joined",
+                stat_total_users: "Total Users",
+                stat_active_scholarships: "Active Scholarships",
+                stat_applications: "Applications This Month",
+                scholarship_add_title: "Add New Scholarship",
+                label_name: "Name",
+                label_description: "Description",
+                label_apply_link: "Application Link",
+                label_requirements: "Requirements",
+                btn_edit: "Edit",
+                btn_delete: "Delete",
+                admin_password_title: "Admin Authentication Required",
+                label_admin_password: "Admin Password",
+                btn_submit: "Submit"
+            },
+            ar: {
+                welcome_header: "مرحبًا بكم في منحة",
+                welcome_subheader: "منصة المساعدة في المنح الدراسية",
+                nav_home: "الرئيسية",
+                nav_dashboard: "لوحة التحكم",
+                nav_scholarship: "باحث المنح",
+                nav_motivation: "رسالة التحفيز",
+                nav_documents: "مركز المستندات",
+                nav_community: "منتدى المجتمع",
+                nav_cv: "بناء السيرة الذاتية",
+                nav_application: "طلباتي",
+                nav_university: "بحث الجامعات",
+                nav_admin: "المشرف",
+                nav_login: "تسجيل الدخول",
+                nav_register: "تسجيل",
+                nav_logout: "تسجيل الخروج",
+                home_title: "ابدأ رحلتك في المنح الدراسية",
+                home_about: "حول منحة",
+                home_about_desc: "نساعد الطلاب في العثور على المنح الدراسية والتقدم لها في جميع أنحاء العالم باستخدام أدوات وإرشادات مخصصة.",
+                home_how_it_works: "كيف يعمل",
+                home_how_it_works_desc: "تبسط منصتنا عملية التقدم للمنح الدراسية في أربع خطوات سهلة.",
+                home_success: "قصص النجاح",
+                home_success_desc: "اقرأ كيف حصل طلاب آخرون على التمويل باستخدام منصتنا.",
+                btn_learn_more: "تعلم المزيد",
+                btn_see_steps: "راجع الخطوات",
+                btn_view_stories: "عرض القصص",
+                btn_register: "تسجيل",
+                btn_login: "تسجيل الدخول",
+                login_title: "تسجيل الدخول",
+                label_email: "البريد الإلكتروني",
+                label_password: "كلمة المرور",
+                btn_back_home: "العودة إلى الرئيسية",
+                login_no_account: "ليس لديك حساب؟",
+                link_register: "سجل هنا",
+                register_title: "تسجيل",
+                label_full_name: "الاسم الكامل",
+                label_confirm_password: "تأكيد كلمة المرور",
+                register_have_account: "هل لديك حساب بالفعل؟",
+                link_login: "سجل الدخول هنا",
+                dashboard_welcome: "مرحبًا بعودتك!",
+                profile_complete: "اكتمال الملف الشخصي 0%",
+                dashboard_complete_profile: "أكمل ملفك الشخصي",
+                dashboard_complete_profile_desc: "أكمل إعداد حسابك للحصول على توصيات مخصصة.",
+                dashboard_upload_docs: "تحميل المستندات",
+                dashboard_upload_docs_desc: "قم بتخزين جميع مواد التقديم الخاصة بك في مكان آمن واحد.",
+                dashboard_scholarship: "باحث المنح",
+                dashboard_scholarship_desc: "ابحث عن المنح الدراسية التي تناسب ملفك الشخصي وأهدافك.",
+                dashboard_motivation: "إنشاء رسالة تحفيز",
+                dashboard_motivation_desc: "أنشئ رسالة مقنعة مصممة خصيصًا لكل طلب.",
+                dashboard_community: "دعم المجتمع",
+                dashboard_community_desc: "احصل على النصائح من المتقدمين الآخرين والفائزين بالمنح الدراسية.",
+                dashboard_cv: "بناء السيرة الذاتية",
+                dashboard_cv_desc: "أنشئ سيرة ذاتية احترافية لطلبات المنح الدراسية الخاصة بك.",
+                dashboard_application: "طلباتي",
+                dashboard_application_desc: "تتبع جميع طلبات المنح الدراسية الخاصة بك في مكان واحد.",
+                dashboard_university: "بحث الجامعات",
+                dashboard_university_desc: "ابحث عن الجامعات التي تناسب ملفك الأكاديمي.",
+                dashboard_notifications: "الإشعارات",
+                dashboard_new_scholarships: "3 منح دراسية جديدة تطابق معاييرك",
+                dashboard_deadline_reminder: "تذكير بالموعد النهائي: منحة XYZ (10 يوليو)",
+                profile_title: "أكمل ملفك الشخصي",
+                tab_personal: "المعلومات الشخصية",
+                tab_education: "التعليم",
+                tab_preferences: "التفضيلات",
+                label_dob: "تاريخ الميلاد",
+                label_nationality: "الجنسية",
+                label_contact: "رقم الاتصال",
+                label_education_level: "مستوى التعليم الحالي",
+                option_select: "اختر",
+                option_highschool: "الثانوية",
+                option_bachelor: "بكالوريوس",
+                option_master: "ماجستير",
+                option_phd: "دكتوراه",
+                label_institution: "المؤسسة الحالية",
+                label_gpa: "المعدل التراكمي/الدرجة",
+                label_field: "مجال الدراسة",
+                label_target_degree: "الدرجة المستهدفة",
+                label_countries: "الدول المفضلة (اختر متعدد)",
+                label_languages: "اللغات التي تتحدثها",
+                language_english: "الإنجليزية",
+                language_french: "الفرنسية",
+                language_german: "الألمانية",
+                language_spanish: "الإسبانية",
+                btn_save: "حفظ",
+                btn_back_dashboard: "العودة إلى لوحة التحكم",
+                scholarship_title: "باحث المنح",
+                scholarship_filters: "الفلاتر",
+                label_country: "البلد",
+                option_any: "أي بلد",
+                country_us: "الولايات المتحدة",
+                country_uk: "المملكة المتحدة",
+                country_ca: "كندا",
+                country_au: "أستراليا",
+                country_de: "ألمانيا",
+                country_fr: "فرنسا",
+                country_nl: "هولندا",
+                label_deadline: "الموعد النهائي",
+                option_any_time: "أي وقت",
+                option_1month: "خلال شهر واحد",
+                option_3months: "خلال 3 أشهر",
+                label_language: "اللغة",
+                option_any_language: "أي لغة",
+                label_program: "نوع البرنامج",
+                option_any_program: "أي برنامج",
+                btn_apply_filters: "تطبيق الفلاتر",
+                btn_reset: "إعادة تعيين",
+                scholarship_results: "النتائج",
+                scholarship_international: "منحة التميز الدولي",
+                scholarship_global: "زمالة القادة العالميين",
+                btn_apply_now: "تقدم الآن",
+                btn_view_details: "عرض التفاصيل",
+                label_funding: "التمويل",
+                funding_full: "تمويل كامل",
+                funding_partial: "تمويل جزئي",
+                funding_tuition: "إعفاء من الرسوم الدراسية",
+                motivation_title: "منشئ رسالة التحفيز",
+                motivation_step1: "الخطوة 1: لماذا تريد هذه المنحة؟",
+                motivation_step1_placeholder: "اشرح دوافعك للتقديم...",
+                motivation_step2: "الخطوة 2: صف أهدافك الأكاديمية",
+                motivation_step2_placeholder: "ما الذي تأمل في تحقيقه أكاديميًا...",
+                motivation_step3: "الخطوة 3: الصق خبرتك الأكاديمية",
+                motivation_step3_placeholder: "تعليمك السابق، الأبحاث، المشاريع...",
+                btn_generate: "إنشاء",
+                motivation_result: "رسالة التحفيز الخاصة بك",
+                btn_download_pdf: "تحميل PDF",
+                btn_download_word: "تحميل Word",
+                documents_title: "مركز المستندات",
+                btn_upload_new: "تحميل جديد",
+                link_edit: "تعديل",
+                link_remove: "إزالة",
+                link_download: "تحميل",
+                storage_usage: "التخزين: 12 ميجابايت من أصل 50 ميجابايت مستخدمة",
+                upload_title: "تحميل مستند جديد",
+                label_document_type: "نوع المستند",
+                option_transcript: "كشف الدرجات",
+                option_cv: "السيرة الذاتية",
+                option_photo: "صورة",
+                option_recommendation: "رسالة توصية",
+                option_other: "أخرى",
+                label_select_file: "اختر ملف",
+                btn_cancel: "إلغاء",
+                btn_upload: "تحميل",
+                community_title: "منتدى المجتمع",
+                btn_new_post: "منشور جديد +",
+                community_popular: "المواضيع الشائعة",
+                community_tips: "نصائح التقديم",
+                community_tips_desc: "أفضل الممارسات للتقديم الناجح",
+                community_visa: "نصائح التأشيرة",
+                community_visa_desc: "التعامل مع متطلبات التأشيرة",
+                community_interview: "التحضير للمقابلة",
+                community_interview_desc: "كيف تتفوق في مقابلة المنحة الدراسية",
+                community_recent: "المناقشات الحديثة",
+                community_question1: "كيف يمكنني تحسين رسالة التحفيز الخاصة بي؟",
+                community_question1_desc: "أقدم على منحة XYZ وأريد أن تكون رسالتي مميزة...",
+                community_question2: "هل هناك عادة تمديد للمواعيد النهائية؟",
+                community_question2_desc: "قد أحتاج إلى بضعة أيام إضافية لإكمال طلبي...",
+                community_posted_by: "نشر بواسطة user34 • منذ ساعتين • 5 تعليقات",
+                forumpost_title: "منشور المنتدى",
+                btn_submit_reply: "إرسال الرد",
+                btn_back_forum: "العودة إلى المنتدى",
+                cv_title: "بناء السيرة الذاتية",
+                label_profession: "المهنة",
+                label_phone: "الهاتف",
+                tab_experience: "الخبرة",
+                tab_skills: "المهارات",
+                label_skills: "المهارات",
+                btn_add_education: "إضافة تعليم",
+                btn_add_experience: "إضافة خبرة",
+                btn_generate_cv: "إنشاء السيرة الذاتية",
+                cv_preview: "معاينة السيرة الذاتية",
+                notification_title: "الإشعارات",
+                notification_scholarship: "منحة دراسية جديدة متطابقة",
+                notification_deadline: "تذكير بالموعد النهائي",
+                notification_community: "رد جديد في المنتدى",
+                additionalletter_title: "رسائل إضافية",
+                letter_recommendation: "رسالة توصية",
+                letter_recommendation_desc: "طلب أو تحميل رسائل التوصية",
+                letter_reference: "رسالة مرجعية",
+                letter_reference_desc: "إنشاء رسائل مرجعية لطلباتك",
+                letter_cover: "خطاب تغطية",
+                letter_cover_desc: "إنشاء خطابات تغطية مخصصة",
+                application_title: "طلباتي",
+                table_scholarship: "المنحة الدراسية",
+                table_status: "الحالة",
+                table_date: "تاريخ التقديم",
+                table_actions: "الإجراءات",
+                btn_view: "عرض",
+                btn_withdraw: "سحب",
+                university_title: "بحث الجامعات",
+                university_filters: "الفلاتر",
+                university_results: "النتائج",
+                label_ranking: "التصنيف العالمي",
+                option_any: "أي",
+                admin_title: "لوحة تحكم المشرف",
+                admin_scholarship_management: "إدارة المنح الدراسية",
+                admin_user_management: "إدارة المستخدمين",
+                admin_system_stats: "إحصائيات النظام",
+                btn_add_scholarship: "إضافة منحة جديدة",
+                table_name: "الاسم",
+                table_email: "البريد الإلكتروني",
+                table_joined: "تاريخ الانضمام",
+                stat_total_users: "إجمالي المستخدمين",
+                stat_active_scholarships: "المنح الدراسية النشطة",
+                stat_applications: "طلبات هذا الشهر",
+                scholarship_add_title: "إضافة منحة جديدة",
+                label_name: "الاسم",
+                label_description: "الوصف",
+                label_apply_link: "رابط التقديم",
+                label_requirements: "المتطلبات",
+                btn_edit: "تعديل",
+                btn_delete: "حذف",
+                admin_password_title: "مطلوب مصادقة المشرف",
+                label_admin_password: "كلمة مرور المشرف",
+                btn_submit: "إرسال"
+            }
+        };
+
+        // Change language
+        function changeLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.type === 'text' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // RTL support for Arabic
+            if (lang === 'ar') {
+                document.body.classList.add('rtl');
+            } else {
+                document.body.classList.remove('rtl');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+        
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Load specific page data if needed
+            if (pageId === 'profile') {
+                loadProfile();
+            } else if (pageId === 'admin') {
+                loadAdminDashboard();
+            } else if (pageId === 'cv') {
+                loadCVData();
+            } else if (pageId === 'application') {
+                loadApplications();
+            } else if (pageId === 'university') {
+                loadUniversities();
+            }
+        }
+        
+        // Check authentication before showing protected pages
+        function checkAuth(pageId) {
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                // For admin page, check role
+                if (pageId === 'admin' && currentUser.role !== 'admin') {
+                    showNotification('Access denied. Admin privileges required.', 'error');
+                    showPage('dashboard');
+                    return;
+                }
+                
+                // For admin page, verify admin password
+                if (pageId === 'admin') {
+                    showAdminPasswordModal();
+                } else {
+                    showPage(pageId);
+                    updateUserGreeting(currentUser.name);
+                }
+            } else {
+                showPage('login');
+            }
+        }
+        
+        // Handle login form submission
+function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                document.getElementById('loginError').textContent = 'Invalid email or password';
+                showNotification('Invalid email or password', 'error');
+                return;
+            }
+            
+            // التحقق من كلمة مرور المسؤول بشكل منفصل
+            if (user.role === 'admin') {
+                const adminPassword = localStorage.getItem(adminPasswordKey);
+                if (password === adminPassword) {
+                    // تعيين المستخدم الحالي
+                    localStorage.setItem(currentUserKey, JSON.stringify(user));
+                    updateAuthUI(user.name);
+                    showPage('dashboard');
+                    showNotification('Login successful', 'success');
+                } else {
+                    document.getElementById('loginError').textContent = 'Invalid email or password';
+                    showNotification('Invalid email or password', 'error');
+                }
+            } else {
+                // للمستخدمين العاديين
+                if (user.password === password) {
+                    localStorage.setItem(currentUserKey, JSON.stringify(user));
+                    updateAuthUI(user.name);
+                    showPage('dashboard');
+                    showNotification('Login successful', 'success');
+                } else {
+                    document.getElementById('loginError').textContent = 'Invalid email or password';
+                    showNotification('Invalid email or password', 'error');
+                }
+            }
+        }
+
+        //ةverifyAdminPassword للتأكد من أنها تعمل بشكل صحيح
+        function verifyAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const storedPassword = localStorage.getItem(adminPasswordKey);
+
+            if (!password) {
+                document.getElementById('adminPasswordError').textContent = 'Please enter admin password';
+                showNotification('Please enter admin password', 'error');
+                return;
+            }
+
+            if (password === storedPassword) {
+                hideAdminPasswordModal();
+                showPage('admin');
+                updateUserGreeting(getCurrentUser().name);
+            } else {
+                document.getElementById('adminPasswordError').textContent = 'Incorrect admin password';
+                showNotification('Incorrect admin password', 'error');
+            }
+        }
+        
+        // Handle registration form submission
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            // Clear previous errors
+            document.getElementById('registerError').textContent = '';
+            
+            // Validate password match
+            if (password !== confirm) {
+                document.getElementById('registerError').textContent = 'Passwords do not match';
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Validate password length
+            if (password.length < 8) {
+                document.getElementById('registerError').textContent = 'Password must be at least 8 characters';
+                showNotification('Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+            
+            // Check if user already exists
+            if (users.some(u => u.email === email)) {
+                document.getElementById('registerError').textContent = 'Email already registered';
+                showNotification('Email already registered', 'error');
+                return;
+            }
+            
+            // Create new user (in production, hash the password)
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password: password, // In production, store hashed password
+                joined: new Date().toISOString(),
+                role: "student", // Default role
+                status: "active",
+                profileCompletion: 0
+            };
+            
+            // Save user
+            users.push(newUser);
+            localStorage.setItem(usersKey, JSON.stringify(users));
+            
+            // Set as current user and redirect
+            localStorage.setItem(currentUserKey, JSON.stringify(newUser));
+            updateAuthUI(newUser.name);
+            showPage('dashboard');
+            showNotification('Registration successful', 'success');
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem(currentUserKey);
+            updateAuthUI();
+            showPage('home');
+            showNotification('Logged out successfully', 'success');
+        }
+        
+        // Get current user from localStorage
+        function getCurrentUser() {
+            const userJson = localStorage.getItem(currentUserKey);
+            if (!userJson) return null;
+            
+            const user = JSON.parse(userJson);
+            const allUsers = JSON.parse(localStorage.getItem(usersKey)) || [];
+            const fullUser = allUsers.find(u => u.id === user.id) || user;
+            
+            // Merge with default role if not set
+            return {
+                ...fullUser,
+                role: fullUser.role || 'student',
+                status: fullUser.status || 'active'
+            };
+        }
+        
+        // Update UI based on authentication state
+        function updateAuthUI(username) {
+            const authLinks = document.getElementById('authLinks');
+            const userNav = document.getElementById('userNav');
+            const usernameDisplay = document.getElementById('usernameDisplay');
+            const adminLink = document.getElementById('adminLink');
+            const currentUser = getCurrentUser();
+            
+            if (currentUser) {
+                authLinks.style.display = 'none';
+                userNav.style.display = 'flex';
+                usernameDisplay.textContent = `Hi, ${currentUser.name}`;
+                updateUserGreeting(currentUser.name);
+                
+                // Show admin link if user is admin
+                if (currentUser.role === 'admin') {
+                    adminLink.style.display = 'block';
+                } else {
+                    adminLink.style.display = 'none';
+                }
+            } else {
+                authLinks.style.display = 'block';
+                userNav.style.display = 'none';
+                if (adminLink) adminLink.style.display = 'none';
+            }
+        }
+        
+        // Update greeting on dashboard
+        function updateUserGreeting(username) {
+            const greeting = document.getElementById('dashboardGreeting');
+            if (greeting) {
+                greeting.textContent = `Welcome back, ${username || 'user'}!`;
+            }
+        }
+        
+        // Tab navigation for profile form
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-container");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabButtons = document.getElementsByClassName("tab-nav")[0].getElementsByTagName("button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // Profile completion functionality
+        function saveProfile(event) {
+            event.preventDefault();
+            
+            // Get all form values
+            const profileData = {
+                personal: {
+                    fullName: document.getElementById('fullName').value,
+                    dob: document.getElementById('dob').value,
+                    nationality: document.getElementById('nationality').value,
+                    contact: document.getElementById('contact').value
+                },
+                education: {
+                    currentEducation: document.getElementById('currentEducation').value,
+                    institution: document.getElementById('institution').value,
+                    gpa: document.getElementById('gpa').value,
+                    field: document.getElementById('field').value
+                },
+                preferences: {
+                    targetDegree: document.getElementById('targetDegree').value,
+                    countries: Array.from(document.getElementById('countries').selectedOptions).map(opt => opt.value),
+                    languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(cb => cb.value)
+                }
+            };
+            
+            // Calculate completion percentage (simplified)
+            let completedFields = 0;
+            const totalFields = 11; // Total number of fields in the form
+            
+            // Check personal info
+            if (profileData.personal.fullName) completedFields++;
+            if (profileData.personal.dob) completedFields++;
+            if (profileData.personal.nationality) completedFields++;
+            if (profileData.personal.contact) completedFields++;
+            
+            // Check education
+            if (profileData.education.currentEducation) completedFields++;
+            if (profileData.education.institution) completedFields++;
+            if (profileData.education.gpa) completedFields++;
+            if (profileData.education.field) completedFields++;
+            
+            // Check preferences
+            if (profileData.preferences.targetDegree) completedFields++;
+            if (profileData.preferences.countries.length > 0) completedFields++;
+            if (profileData.preferences.languages.length > 0) completedFields++;
+            
+            const completionPercentage = Math.round((completedFields / totalFields) * 100);
+            
+            // Update progress
+            document.getElementById('profileProgress').style.width = completionPercentage + '%';
+            document.getElementById('progressText').textContent = `Profile ${completionPercentage}% complete`;
+            
+            // Save to localStorage
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                currentUser.profile = profileData;
+                currentUser.profileCompletion = completionPercentage;
+                localStorage.setItem(currentUserKey, JSON.stringify(currentUser));
+                
+                // Update in users array
+                const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem(usersKey, JSON.stringify(users));
+                }
+            }
+            
+            // Show success message and return to dashboard
+            showNotification('Profile saved successfully!', 'success');
+            showPage('dashboard');
+        }
+        
+        // Load profile data if exists
+        function loadProfile() {
+            const currentUser = getCurrentUser();
+            if (currentUser && currentUser.profile) {
+                const profileData = currentUser.profile;
+                
+                // Personal info
+                document.getElementById('fullName').value = profileData.personal.fullName || '';
+                document.getElementById('dob').value = profileData.personal.dob || '';
+                document.getElementById('nationality').value = profileData.personal.nationality || '';
+                document.getElementById('contact').value = profileData.personal.contact || '';
+                
+                // Education
+                document.getElementById('currentEducation').value = profileData.education.currentEducation || '';
+                document.getElementById('institution').value = profileData.education.institution || '';
+                document.getElementById('gpa').value = profileData.education.gpa || '';
+                document.getElementById('field').value = profileData.education.field || '';
+                
+                // Preferences
+                document.getElementById('targetDegree').value = profileData.preferences.targetDegree || '';
+                
+                // Set selected countries
+                const countrySelect = document.getElementById('countries');
+                for (let i = 0; i < countrySelect.options.length; i++) {
+                    countrySelect.options[i].selected = profileData.preferences.countries.includes(countrySelect.options[i].value);
+                }
+                
+                // Set checked languages
+                document.querySelectorAll('input[name="languages"]').forEach(checkbox => {
+                    checkbox.checked = profileData.preferences.languages.includes(checkbox.value);
+                });
+                
+                // Update progress
+                if (currentUser.profileCompletion) {
+                    document.getElementById('profileProgress').style.width = currentUser.profileCompletion + '%';
+                    document.getElementById('progressText').textContent = `Profile ${currentUser.profileCompletion}% complete`;
+                }
+            }
+        }
+        
+        // Scholarship filter functions
+        function filterScholarships() {
+            const country = document.getElementById('filterCountry').value;
+            const deadline = document.getElementById('filterDeadline').value;
+            const language = document.getElementById('filterLanguage').value;
+            const program = document.getElementById('filterProgram').value;
+            
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            const filtered = scholarships.filter(s => {
+                return (!country || s.country === country) &&
+                       (!program || s.program === program) &&
+                       (!deadline || checkDeadlineFilter(s.deadline, deadline)) &&
+                       s.status === 'active';
+            });
+            
+            displayScholarshipResults(filtered);
+            showNotification(`Found ${filtered.length} scholarships matching your criteria`, 'success');
+        }
+        
+        function checkDeadlineFilter(scholarshipDeadline, filterValue) {
+            const deadline = new Date(scholarshipDeadline);
+            const today = new Date();
+            const diffTime = deadline - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (filterValue === '1month') return diffDays <= 30;
+            if (filterValue === '3months') return diffDays <= 90;
+            return true;
+        }
+        
+        function displayScholarshipResults(scholarships) {
+            const resultsContainer = document.querySelector('#scholarship > .card > div > div:nth-child(2)');
+            resultsContainer.innerHTML = `
+                <h3 data-i18n="scholarship_results">Results <span id="resultCount">(${scholarships.length})</span></h3>
+                ${scholarships.map(s => `
+                    <div class="card">
+                        <h4>${s.name}</h4>
+                        <p><strong data-i18n="label_deadline">Deadline:</strong> ${formatDate(s.deadline)}</p>
+                        <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_${s.country}">${getCountryName(s.country)}</span></p>
+                        <p><strong data-i18n="label_program">Program:</strong> <span data-i18n="option_${s.program}">${getProgramName(s.program)}</span></p>
+                        <p><strong data-i18n="label_funding">Funding:</strong> <span data-i18n="funding_${s.funding}">${getFundingName(s.funding)}</span></p>
+                        <button class="btn" onclick="applyScholarship('${s.id}')" data-i18n="btn_apply_now">Apply Now</button>
+                        <button class="btn btn-accent" onclick="viewScholarshipDetails('${s.id}')" data-i18n="btn_view_details">View Details</button>
+                    </div>
+                `).join('')}
+            `;
+            
+            // Update translations for new elements
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        function getCountryName(code) {
+            const element = document.querySelector(`[data-i18n="country_${code}"]`);
+            return element ? element.textContent : code;
+        }
+        
+        function getProgramName(code) {
+            const element = document.querySelector(`[data-i18n="option_${code}"]`);
+            return element ? element.textContent : code;
+        }
+        
+        function getFundingName(code) {
+            const element = document.querySelector(`[data-i18n="funding_${code}"]`);
+            return element ? element.textContent : code;
+        }
+        
+        function applyScholarship(id) {
+            const scholarship = getScholarshipById(id);
+            if (scholarship && scholarship.link) {
+                window.open(scholarship.link, '_blank');
+                showNotification(`Redirecting to application for ${scholarship.name}`, 'info');
+                
+                // Track this application
+                trackApplication(id);
+            } else {
+                showNotification('Application link not available', 'error');
+            }
+        }
+        
+        function getScholarshipById(id) {
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            return scholarships.find(s => s.id === id);
+        }
+        
+        function trackApplication(scholarshipId) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+            
+            const applications = JSON.parse(localStorage.getItem(applicationsKey)) || [];
+            const newApplication = {
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                scholarshipId,
+                appliedAt: new Date().toISOString(),
+                status: 'applied'
+            };
+            
+            applications.push(newApplication);
+            localStorage.setItem(applicationsKey, JSON.stringify(applications));
+        }
+        
+        // Document center functions
+        function showUploadModal() {
+            document.getElementById('uploadModal').style.display = 'flex';
+        }
+        
+        function hideUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+        
+        function uploadDocument() {
+            const fileInput = document.getElementById('fileUpload');
+            if (fileInput.files.length === 0) {
+                showNotification('Please select a file to upload', 'error');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+            const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
+            
+            if (file.size > MAX_FILE_SIZE) {
+                showNotification('File size must be less than 5MB', 'error');
+                return;
+            }
+            
+            if (!ALLOWED_TYPES.includes(file.type)) {
+                showNotification('Only PDF, JPEG, and PNG files are allowed', 'error');
+                return;
+            }
+            
+            const fileType = document.getElementById('documentType').value;
+            
+            // In a real app, you would handle the file upload here
+            const document = {
+                id: Date.now(),
+                name: file.name,
+                type: fileType,
+                size: file.size,
+                uploadedAt: new Date().toISOString()
+            };
+            
+            // Add to UI
+            const fileList = document.querySelector('.file-list');
+            const fileItem = document.createElement('li');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <span>${document.name}</span>
+                <span class="file-actions">
+                    <a href="#" data-i18n="link_download">Download</a>
+                    <a href="#" data-i18n="link_remove">Remove</a>
+                </span>
+            `;
+            fileList.appendChild(fileItem);
+            
+            // Update translations for new elements
+            changeLanguage(document.documentElement.lang || 'en');
+            
+            hideUploadModal();
+            showNotification('Document uploaded successfully!', 'success');
+        }
+        
+        // CV Builder Functions
+        function addEducationEntry() {
+            const container = document.getElementById('educationEntries');
+            const entryId = Date.now();
+            
+            const entry = document.createElement('div');
+            entry.className = 'education-entry';
+            entry.innerHTML = `
+                <div class="form-group">
+                    <label data-i18n="label_degree">Degree</label>
+                    <input type="text" id="eduDegree_${entryId}">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_institution">Institution</label>
+                    <input type="text" id="eduInstitution_${entryId}">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_year">Year</label>
+                    <input type="text" id="eduYear_${entryId}">
+                </div>
+                <button class="btn btn-danger" onclick="removeEntry(this.parentNode)" data-i18n="btn_remove">Remove</button>
+                <hr>
+            `;
+            
+            container.appendChild(entry);
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function addExperienceEntry() {
+            const container = document.getElementById('experienceEntries');
+            const entryId = Date.now();
+            
+            const entry = document.createElement('div');
+            entry.className = 'experience-entry';
+            entry.innerHTML = `
+                <div class="form-group">
+                    <label data-i18n="label_position">Position</label>
+                    <input type="text" id="expPosition_${entryId}">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_company">Company</label>
+                    <input type="text" id="expCompany_${entryId}">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_duration">Duration</label>
+                    <input type="text" id="expDuration_${entryId}">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="label_description">Description</label>
+                    <textarea id="expDescription_${entryId}" rows="3"></textarea>
+                </div>
+                <button class="btn btn-danger" onclick="removeEntry(this.parentNode)" data-i18n="btn_remove">Remove</button>
+                <hr>
+            `;
+            
+            container.appendChild(entry);
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function removeEntry(element) {
+            element.remove();
+        }
+        
+        function generateCV() {
+            const cvData = {
+                personal: {
+                    fullName: document.getElementById('cvFullName').value,
+                    profession: document.getElementById('cvProfession').value,
+                    email: document.getElementById('cvEmail').value,
+                    phone: document.getElementById('cvPhone').value
+                },
+                education: [],
+                experience: [],
+                skills: document.getElementById('cvSkillsList').value.split(',').map(s => s.trim())
+            };
+            
+            // Get education entries
+            const educationEntries = document.querySelectorAll('.education-entry');
+            educationEntries.forEach(entry => {
+                const id = entry.id.split('_')[1];
+                cvData.education.push({
+                    degree: document.getElementById(`eduDegree_${id}`).value,
+                    institution: document.getElementById(`eduInstitution_${id}`).value,
+                    year: document.getElementById(`eduYear_${id}`).value
+                });
+            });
+            
+            // Get experience entries
+            const experienceEntries = document.querySelectorAll('.experience-entry');
+            experienceEntries.forEach(entry => {
+                const id = entry.id.split('_')[1];
+                cvData.experience.push({
+                    position: document.getElementById(`expPosition_${id}`).value,
+                    company: document.getElementById(`expCompany_${id}`).value,
+                    duration: document.getElementById(`expDuration_${id}`).value,
+                    description: document.getElementById(`expDescription_${id}`).value
+                });
+            });
+            
+            // Save CV data
+            localStorage.setItem(cvKey, JSON.stringify(cvData));
+            
+            // Generate preview
+            const preview = document.getElementById('cvPreviewContent');
+            preview.innerHTML = `
+                <h3>${cvData.personal.fullName}</h3>
+                <p>${cvData.personal.profession}</p>
+                <p>Email: ${cvData.personal.email} | Phone: ${cvData.personal.phone}</p>
+                
+                <h4>Education</h4>
+                <ul>
+                    ${cvData.education.map(edu => `
+                        <li>
+                            <strong>${edu.degree}</strong> - ${edu.institution} (${edu.year})
+                        </li>
+                    `).join('')}
+                </ul>
+                
+                <h4>Experience</h4>
+                <ul>
+                    ${cvData.experience.map(exp => `
+                        <li>
+                            <strong>${exp.position}</strong> at ${exp.company} (${exp.duration})
+                            <p>${exp.description}</p>
+                        </li>
+                    `).join('')}
+                </ul>
+                
+                <h4>Skills</h4>
+                <p>${cvData.skills.join(', ')}</p>
+            `;
+            
+            document.getElementById('cvPreview').style.display = 'block';
+            showNotification('CV generated successfully!', 'success');
+        }
+        
+        function downloadCV(format) {
+            showNotification(`Downloading CV as ${format.toUpperCase()}`, 'info');
+            // In a real app, implement actual download functionality
+        }
+        
+        function loadCVData() {
+            const cvData = JSON.parse(localStorage.getItem(cvKey)) || {};
+            
+            if (cvData.personal) {
+                document.getElementById('cvFullName').value = cvData.personal.fullName || '';
+                document.getElementById('cvProfession').value = cvData.personal.profession || '';
+                document.getElementById('cvEmail').value = cvData.personal.email || '';
+                document.getElementById('cvPhone').value = cvData.personal.phone || '';
+            }
+            
+            if (cvData.education) {
+                const container = document.getElementById('educationEntries');
+                container.innerHTML = '';
+                cvData.education.forEach(edu => {
+                    addEducationEntry();
+                    const entryId = container.lastChild.id.split('_')[1];
+                    document.getElementById(`eduDegree_${entryId}`).value = edu.degree || '';
+                    document.getElementById(`eduInstitution_${entryId}`).value = edu.institution || '';
+                    document.getElementById(`eduYear_${entryId}`).value = edu.year || '';
+                });
+            }
+            
+            if (cvData.experience) {
+                const container = document.getElementById('experienceEntries');
+                container.innerHTML = '';
+                cvData.experience.forEach(exp => {
+                    addExperienceEntry();
+                    const entryId = container.lastChild.id.split('_')[1];
+                    document.getElementById(`expPosition_${entryId}`).value = exp.position || '';
+                    document.getElementById(`expCompany_${entryId}`).value = exp.company || '';
+                    document.getElementById(`expDuration_${entryId}`).value = exp.duration || '';
+                    document.getElementById(`expDescription_${entryId}`).value = exp.description || '';
+                });
+            }
+            
+            if (cvData.skills) {
+                document.getElementById('cvSkillsList').value = cvData.skills.join(', ');
+            }
+        }
+        
+        // Forum Post Functions
+        function showForumPost(postId) {
+            const posts = JSON.parse(localStorage.getItem(forumPostsKey)) || [];
+            const post = posts.find(p => p.id === postId);
+            
+            if (post) {
+                document.getElementById('postTitle').textContent = post.title;
+                document.getElementById('postContent').textContent = post.content;
+                
+                const repliesContainer = document.getElementById('postReplies');
+                repliesContainer.innerHTML = post.replies.map(reply => `
+                    <div class="card" style="margin-top: 15px;">
+                        <p>${reply.content}</p>
+                        <p class="discussion-meta">Reply by ${reply.author} • ${formatDate(reply.createdAt)}</p>
+                    </div>
+                `).join('');
+                
+                showPage('forumpost');
+            }
+        }
+        
+        function submitReply() {
+            const content = document.getElementById('replyContent').value;
+            if (!content) {
+                showNotification('Please enter reply content', 'error');
+                return;
+            }
+            
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                showNotification('You must be logged in to reply', 'error');
+                return;
+            }
+            
+            const posts = JSON.parse(localStorage.getItem(forumPostsKey)) || [];
+            const currentPostId = document.getElementById('postTitle').getAttribute('data-post-id') || '1';
+            const postIndex = posts.findIndex(p => p.id === currentPostId);
+            
+            if (postIndex !== -1) {
+                const newReply = {
+                    id: Date.now().toString(),
+                    content,
+                    author: currentUser.name,
+                    createdAt: new Date().toISOString()
+                };
+                
+                posts[postIndex].replies.push(newReply);
+                localStorage.setItem(forumPostsKey, JSON.stringify(posts));
+                
+                // Add to UI
+                const repliesContainer = document.getElementById('postReplies');
+                const reply = document.createElement('div');
+                reply.className = 'card';
+                reply.style.marginTop = '15px';
+                reply.innerHTML = `
+                    <p>${content}</p>
+                    <p class="discussion-meta">Reply by you • just now</p>
+                `;
+                
+                repliesContainer.appendChild(reply);
+                document.getElementById('replyContent').value = '';
+                showNotification('Reply posted successfully', 'success');
+            }
+        }
+        
+        // Application Tracking Functions
+        function loadApplications() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+            
+            const applications = JSON.parse(localStorage.getItem(applicationsKey)) || [];
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            
+            const userApplications = applications.filter(app => app.userId === currentUser.id);
+            
+            const tbody = document.getElementById('applicationTableBody');
+            tbody.innerHTML = userApplications.map(app => {
+                const scholarship = scholarships.find(s => s.id === app.scholarshipId) || {};
+                return `
+                    <tr>
+                        <td>${scholarship.name || 'Unknown Scholarship'}</td>
+                        <td><span class="status-badge ${app.status === 'applied' ? 'status-pending' : 'status-active'}">${app.status}</span></td>
+                        <td>${formatDate(app.appliedAt)}</td>
+                        <td>
+                            <button class="btn" onclick="viewApplication('${app.id}')" data-i18n="btn_view">View</button>
+                            <button class="btn" onclick="withdrawApplication('${app.id}')" data-i18n="btn_withdraw">Withdraw</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            if (userApplications.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No applications found</td>
+                    </tr>
+                `;
+            }
+            
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function viewApplication(id) {
+            showNotification('Viewing application details', 'info');
+            // Implement detailed view functionality
+        }
+        
+        function withdrawApplication(id) {
+            if (confirm('Are you sure you want to withdraw this application?')) {
+                const applications = JSON.parse(localStorage.getItem(applicationsKey)) || [];
+                const updatedApplications = applications.filter(app => app.id !== id);
+                
+                localStorage.setItem(applicationsKey, JSON.stringify(updatedApplications));
+                loadApplications();
+                showNotification('Application withdrawn', 'success');
+            }
+        }
+        
+        // University Finder Functions
+        function loadUniversities() {
+            const universities = JSON.parse(localStorage.getItem(universitiesKey)) || [];
+            const resultsContainer = document.querySelector('#university > .card > div > div:nth-child(2)');
+            
+            resultsContainer.innerHTML = `
+                <h3 data-i18n="university_results">Results</h3>
+                ${universities.map(uni => `
+                    <div class="card university-card">
+                        <h4>${uni.name}</h4>
+                        <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_${uni.country}">${getCountryName(uni.country)}</span></p>
+                        <p><strong data-i18n="label_ranking">Ranking:</strong> #${uni.ranking}</p>
+                        <p><strong data-i18n="label_programs">Programs:</strong> ${uni.programs.map(p => getProgramName(p)).join(', ')}</p>
+                        <button class="btn" onclick="viewUniversityDetails('${uni.id}')" data-i18n="btn_view_details">View Details</button>
+                    </div>
+                `).join('')}
+            `;
+            
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function filterUniversities() {
+            const country = document.getElementById('universityCountry').value;
+            const ranking = document.getElementById('universityRanking').value;
+            const program = document.getElementById('universityProgram').value;
+            
+            const universities = JSON.parse(localStorage.getItem(universitiesKey)) || [];
+            const filtered = universities.filter(uni => {
+                return (!country || uni.country === country) &&
+                       (!program || uni.programs.includes(program)) &&
+                       (!ranking || checkRankingFilter(uni.ranking, ranking));
+            });
+            
+            const resultsContainer = document.querySelector('#university > .card > div > div:nth-child(2)');
+            resultsContainer.innerHTML = `
+                <h3 data-i18n="university_results">Results (${filtered.length})</h3>
+                ${filtered.map(uni => `
+                    <div class="card university-card">
+                        <h4>${uni.name}</h4>
+                        <p><strong data-i18n="label_country">Country:</strong> <span data-i18n="country_${uni.country}">${getCountryName(uni.country)}</span></p>
+                        <p><strong data-i18n="label_ranking">Ranking:</strong> #${uni.ranking}</p>
+                        <p><strong data-i18n="label_programs">Programs:</strong> ${uni.programs.map(p => getProgramName(p)).join(', ')}</p>
+                        <button class="btn" onclick="viewUniversityDetails('${uni.id}')" data-i18n="btn_view_details">View Details</button>
+                    </div>
+                `).join('')}
+            `;
+            
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML += `<p>No universities match your criteria</p>`;
+            }
+            
+            changeLanguage(document.documentElement.lang || 'en');
+            showNotification(`Found ${filtered.length} universities matching your criteria`, 'success');
+        }
+        
+        function checkRankingFilter(universityRanking, filterValue) {
+            if (filterValue === 'top100') return universityRanking <= 100;
+            if (filterValue === 'top200') return universityRanking <= 200;
+            if (filterValue === 'top500') return universityRanking <= 500;
+            return true;
+        }
+        
+        function viewUniversityDetails(id) {
+            const universities = JSON.parse(localStorage.getItem(universitiesKey)) || [];
+            const university = universities.find(u => u.id === id);
+            
+            if (university) {
+                alert(`University Details:\n\nName: ${university.name}\nCountry: ${getCountryName(university.country)}\nRanking: #${university.ranking}\nPrograms: ${university.programs.map(p => getProgramName(p)).join(', ')}\n\nDescription: ${university.description}`);
+            }
+        }
+        
+        // Additional Letters Functions
+        function showLetterType(type) {
+            const container = document.getElementById('letterTypeContainer');
+            container.style.display = 'block';
+            
+            switch(type) {
+                case 'recommendation':
+                    container.innerHTML = `
+                        <h3 data-i18n="letter_recommendation">Recommendation Letter</h3>
+                        <div class="form-group">
+                            <label data-i18n="label_requester_name">Requester Name</label>
+                            <input type="text" id="requesterName">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_requester_email">Requester Email</label>
+                            <input type="email" id="requesterEmail">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_recommender_name">Recommender Name</label>
+                            <input type="text" id="recommenderName">
+                        </div>
+                        <button class="btn" onclick="requestRecommendation()" data-i18n="btn_request">Request Letter</button>
+                    `;
+                    break;
+                    
+                case 'reference':
+                    container.innerHTML = `
+                        <h3 data-i18n="letter_reference">Reference Letter</h3>
+                        <div class="form-group">
+                            <label data-i18n="label_recipient_name">Recipient Name</label>
+                            <input type="text" id="recipientName">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_letter_content">Letter Content</label>
+                            <textarea id="referenceContent" rows="5"></textarea>
+                        </div>
+                        <button class="btn" onclick="generateReference()" data-i18n="btn_generate">Generate Letter</button>
+                    `;
+                    break;
+                    
+                case 'cover':
+                    container.innerHTML = `
+                        <h3 data-i18n="letter_cover">Cover Letter</h3>
+                        <div class="form-group">
+                            <label data-i18n="label_position">Position</label>
+                            <input type="text" id="coverPosition">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_company">Company/Institution</label>
+                            <input type="text" id="coverCompany">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="label_letter_content">Letter Content</label>
+                            <textarea id="coverContent" rows="5"></textarea>
+                        </div>
+                        <button class="btn" onclick="generateCover()" data-i18n="btn_generate">Generate Letter</button>
+                    `;
+                    break;
+            }
+            
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function requestRecommendation() {
+            showNotification('Recommendation letter request sent', 'success');
+        }
+        
+        function generateReference() {
+            showNotification('Reference letter generated', 'success');
+        }
+        
+        function generateCover() {
+            showNotification('Cover letter generated', 'success');
+        }
+        
+        // Admin functions
+        function showAddScholarshipModal() {
+            document.getElementById('addScholarshipModal').style.display = 'flex';
+        }
+        
+        function hideAddScholarshipModal() {
+            document.getElementById('addScholarshipModal').style.display = 'none';
+            document.getElementById('addScholarshipForm').reset();
+        }
+
+        // Admin password functions
+        function showAdminPasswordModal() {
+            document.getElementById('adminPasswordModal').style.display = 'flex';
+        }
+
+        function hideAdminPasswordModal() {
+            document.getElementById('adminPasswordModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPasswordError').textContent = '';
+        }
+
+        function verifyAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const storedPassword = localStorage.getItem(adminPasswordKey);
+
+            if (!password) {
+                document.getElementById('adminPasswordError').textContent = 'Please enter admin password';
+                showNotification('Please enter admin password', 'error');
+                return;
+            }
+
+            // For testing, compare plain text password
+            if (password === storedPassword) {
+                hideAdminPasswordModal();
+                showPage('admin');
+                updateUserGreeting(getCurrentUser().name);
+            } else {
+                document.getElementById('adminPasswordError').textContent = 'Incorrect admin password';
+                showNotification('Incorrect admin password', 'error');
+            }
+        }
+        
+        function loadAdminDashboard() {
+            loadUserManagement();
+            loadScholarshipManagement();
+            loadSystemStats();
+        }
+        
+        function loadUserManagement() {
+            const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${new Date(user.joined).toLocaleDateString()}</td>
+                    <td><span class="status-badge ${user.status === 'active' ? 'status-active' : 'status-pending'}">${user.status}</span></td>
+                    <td>
+                        <button class="btn" onclick="editUser('${user.id}')" data-i18n="btn_edit">Edit</button>
+                        ${user.role !== 'admin' ? `<button class="btn btn-danger" onclick="deleteUser('${user.id}')" data-i18n="btn_delete">Delete</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Update translations for new elements
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function loadScholarshipManagement() {
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            const container = document.getElementById('scholarshipList');
+            container.innerHTML = scholarships.map(scholarship => `
+                <div class="card">
+                    <h4>${scholarship.name}</h4>
+                    <p><strong data-i18n="label_deadline">Deadline:</strong> ${formatDate(scholarship.deadline)}</p>
+                    <p><strong data-i18n="label_status">Status:</strong> ${scholarship.status}</p>
+                    <div style="margin-top: 15px;">
+                        <button class="btn" onclick="editScholarship('${scholarship.id}')" data-i18n="btn_edit">Edit</button>
+                        <button class="btn btn-accent" onclick="toggleScholarshipStatus('${scholarship.id}')">
+                            ${scholarship.status === 'active' ? 'Deactivate' : 'Activate'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update translations for new elements
+            changeLanguage(document.documentElement.lang || 'en');
+        }
+        
+        function loadSystemStats() {
+            const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            const applications = JSON.parse(localStorage.getItem(applicationsKey)) || [];
+            
+            document.getElementById('statUsers').textContent = users.length;
+            document.getElementById('statScholarships').textContent = scholarships.filter(s => s.status === 'active').length;
+            
+            const thisMonth = new Date().getMonth();
+            const thisYear = new Date().getFullYear();
+            const monthlyApplications = applications.filter(app => {
+                const appDate = new Date(app.appliedAt);
+                return appDate.getMonth() === thisMonth && appDate.getFullYear() === thisYear;
+            }).length;
+            
+            document.getElementById('statApplications').textContent = monthlyApplications;
+        }
+        
+        // Handle add scholarship form
+        document.getElementById('addScholarshipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('scholarshipName').value;
+            const description = document.getElementById('scholarshipDescription').value;
+            const deadline = document.getElementById('scholarshipDeadline').value;
+            const country = document.getElementById('scholarshipCountry').value;
+            const program = document.getElementById('scholarshipProgram').value;
+            const funding = document.getElementById('scholarshipFunding').value;
+            const link = document.getElementById('scholarshipLink').value;
+            const requirements = document.getElementById('scholarshipRequirements').value;
+            
+            if (!name || !description || !deadline || !country || !program || !funding || !link) {
+                showNotification('Please fill all required fields', 'error');
+                return;
+            }
+            
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                showNotification('User not authenticated', 'error');
+                return;
+            }
+            
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            const newScholarship = {
+                id: Date.now().toString(),
+                name,
+                description,
+                deadline,
+                country,
+                program,
+                funding,
+                link,
+                requirements,
+                status: 'active',
+                createdBy: currentUser.id,
+                createdAt: new Date().toISOString()
+            };
+            
+            scholarships.push(newScholarship);
+            localStorage.setItem(scholarshipsKey, JSON.stringify(scholarships));
+            
+            hideAddScholarshipModal();
+            loadScholarshipManagement();
+            showNotification('Scholarship added successfully', 'success');
+        });
+        
+        function toggleScholarshipStatus(id) {
+            const scholarships = JSON.parse(localStorage.getItem(scholarshipsKey)) || [];
+            const scholarshipIndex = scholarships.findIndex(s => s.id === id);
+            
+            if (scholarshipIndex !== -1) {
+                scholarships[scholarshipIndex].status = 
+                    scholarships[scholarshipIndex].status === 'active' ? 'inactive' : 'active';
+                
+                localStorage.setItem(scholarshipsKey, JSON.stringify(scholarships));
+                loadScholarshipManagement();
+                showNotification('Scholarship status updated', 'success');
+            }
+        }
+        
+        function editUser(id) {
+            showNotification('Edit user functionality coming soon', 'info');
+        }
+        
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+                const updatedUsers = users.filter(user => user.id !== id);
+                
+                localStorage.setItem(usersKey, JSON.stringify(updatedUsers));
+                loadUserManagement();
+                showNotification('User deleted successfully', 'success');
+            }
+        }
+        
+        function editScholarship(id) {
+            showNotification('Edit scholarship functionality coming soon', 'info');
+        }
+        
+        // Check for deadline notifications
+        function checkDeadlineNotifications() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const upcoming = [
+                { title: "International Excellence Scholarship", deadline: "2023-07-10" },
+                { title: "Global Leaders Fellowship", deadline: "2023-08-01" }
+            ].filter(s => {
+                const deadline = new Date(s.deadline);
+                const today = new Date();
+                const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+                return diffDays > 0 && diffDays <= 7;
+            });
+            
+            if (upcoming.length) {
+                showNotification(
+                    `You have ${upcoming.length} scholarship(s) with approaching deadlines`,
+                    'warning'
+                );
+            }
+        }
+        
+        // Initialize the page
+        window.onload = function() {
+            const currentUser = getCurrentUser();
+            updateAuthUI(currentUser?.name);
+            
+            if (currentUser) {
+                loadProfile();
+                
+                // Redirect to dashboard if logged in and trying to access home/login/register
+                if (!['#login', '#register'].includes(window.location.hash)) {
+                    showPage('dashboard');
+                }
+                
+                // Load admin dashboard if admin
+                if (currentUser.role === 'admin' && window.location.hash === '#admin') {
+                    showAdminPasswordModal();
+                }
+            } else {
+                showPage('home');
+            }
+            
+            // Set default language
+            changeLanguage('en');
+            
+            // Check for deadline notifications
+            checkDeadlineNotifications();
+            
+            // Check for deadline notifications every hour
+            setInterval(checkDeadlineNotifications, 60 * 60 * 1000);
+        };
+    </script>
+</body>
+</html>
